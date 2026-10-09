@@ -34,9 +34,7 @@ The site is a fully static multi-page HTML site — no build step, no framework,
 │   ├── js/                 # jQuery + HTML5 UP interaction scripts
 │   ├── img/
 │   │   ├── logo/           # Brand logos and icons (PNG, white/black, transparent variants)
-│   │   ├── band/
-│   │   │   ├── dordt/      # Band photos (black and white)
-│   │   │   └── stage/      # Live/stage photos (colour)
+│   │   ├── band/           # Band photos (black and white rehearsal/location shots, colour stage shots)
 │   │   └── [member dirs]/  # Per-member portraits (daniel, maarten, joris, stefan)
 │   └── webfonts/           # Font Awesome webfonts
 └── images/                 # HTML5 UP template images (bg.jpg, overlay.png, pic0x.jpg)

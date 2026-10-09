@@ -311,15 +311,15 @@ ul.icons.alt li a.icon:hover:before,
 }
 
 .page-live #wrapper > .bg {
-	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/stage/IMG_3219_bg.jpg');
+	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/IMG_3219_bg.jpg');
 }
 
 .page-band #wrapper > .bg {
-	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/dordt/IMG_2000_4x3_BW_bg.jpg');
+	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/IMG_2000_4x3_BW_bg.jpg');
 }
 
 .page-media #wrapper > .bg {
-	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/stage/IMG_3491_bg.jpg');
+	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('../img/band/IMG_3491_bg.jpg');
 }
 
 /* Table headers and values aligned to the left ---------------- */
