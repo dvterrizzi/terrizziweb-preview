@@ -255,4 +255,10 @@
 
 		}
 
+	// Header: mark it as stuck once it has pinned to the top of the viewport.
+		$window.on('scroll resize load', function() {
+			var pinTop = parseFloat($header.css('top')) || 0;
+			$header.toggleClass('stuck', $header[0].getBoundingClientRect().top <= pinTop + 1);
+		});
+
 })(jQuery);
