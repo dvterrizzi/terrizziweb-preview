@@ -1,0 +1,22 @@
+---
+title: Terrizzi - Media
+bodyClass: is-preload page-inner page-media
+navKey: media
+permalink: media.html
+---
+{% extends "base.njk" %}
+
+{% block main %}
+			<section class="post">
+				<header class="major">
+					<h1>Media</h1>
+				</header>
+
+				<!-- Videos -->
+				<div class="video-responsive">
+					<iframe loading="lazy" src="{{ site.promoVideo }}"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen></iframe>
+				</div>
+			</section>
+{% endblock %}

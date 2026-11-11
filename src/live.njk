@@ -1,0 +1,58 @@
+---
+title: Terrizzi - Live
+bodyClass: is-preload page-inner page-live
+navKey: live
+permalink: live.html
+---
+{% extends "base.njk" %}
+{% from "macros.njk" import upcomingTable, bookingButton %}
+
+{% block main %}
+			<section class="post">
+				<header class="major">
+					<h1>Live</h1>
+				</header>
+
+				<h2>Aankomende optredens</h2>
+
+				{{ upcomingTable(gigs.upcoming, true) }}
+
+				<hr />
+
+				<h2>Vorige optredens</h2>
+
+				<div class="table-wrapper">
+					<table>
+						<thead>
+							<tr>
+								<th>Datum</th>
+								<th>Locatie</th>
+								<th>Stad</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%- for gig in gigs.past %}
+							<tr>
+								<td>{{ gig.date }}</td>
+								<td>{{ gig.venue }}</td>
+								<td>{{ gig.city }}</td>
+							</tr>
+							{%- else %}
+							<tr>
+								<td colspan="3"><em>Eerdere optredens worden hier vermeld.</em></td>
+							</tr>
+							{%- endfor %}
+						</tbody>
+					</table>
+				</div>
+
+				<hr />
+
+				<h2>Wil je ons op jouw evenement?</h2>
+				<p>We spelen op podia, festivals, privé-evenementen en alles daartussenin. Neem contact op om de mogelijkheden te bespreken.</p>
+				<ul class="actions">
+					<li>{{ bookingButton(site) }}</li>
+				</ul>
+
+			</section>
+{% endblock %}

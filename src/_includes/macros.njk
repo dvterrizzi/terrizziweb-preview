@@ -1,0 +1,37 @@
+{# Booking button: opens a prefilled email to the band. #}
+{% macro bookingButton(site) -%}
+<a href="mailto:{{ site.email }}?subject={{ site.bookingSubject | urlencode }}" class="button primary">Stuur een boekingsaanvraag</a>
+{%- endmacro %}
+
+{# Upcoming gigs table. Pass showTickets=true to add the Tickets column. #}
+{% macro upcomingTable(gigs, showTickets=false) -%}
+<div class="table-wrapper">
+	<table class="alt">
+		<thead>
+			<tr>
+				<th>Datum</th>
+				<th>Locatie</th>
+				<th>Stad</th>
+				{%- if showTickets %}
+				<th>Tickets</th>
+				{%- endif %}
+			</tr>
+		</thead>
+		<tbody>
+			{%- for gig in gigs %}
+			<tr>
+				<td>{{ gig.date }}</td>
+				<td>{{ gig.venue }}</td>
+				<td>{{ gig.city }}</td>
+				{%- if showTickets %}
+				<td>{% if gig.tickets %}<a href="{{ gig.tickets }}" target="_blank" rel="noopener noreferrer" class="button small">Tickets</a>{% endif %}</td>
+				{%- endif %}
+			</tr>
+			{%- endfor %}
+			<tr>
+				<td colspan="{{ 4 if showTickets else 3 }}"><em>Meer data volgen binnenkort — volg ons op social media voor updates.</em></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+{%- endmacro %}

@@ -1,52 +1,70 @@
 # Terrizzi — Band Website
 
-Static website for **Terrizzi**, a four-piece Dutch rock band. Live at [preview.terrizzi.nl](https://preview.terrizzi.nl).
+Website for **Terrizzi**, a four-piece Dutch rock band. Live at [preview.terrizzi.nl](https://preview.terrizzi.nl).
 
 ## Pages
 
-| File | Route | Purpose |
+| Source | Output | Purpose |
 |---|---|---|
-| `index.html` | `/` | Landing page with hero image, promo video and upcoming shows |
-| `band.html` | `/band.html` | Band introduction and member profiles |
-| `media.html` | `/media.html` | Embedded video |
-| `live.html` | `/live.html` | Upcoming and past shows, booking contact |
-| `elements.html` | `/elements.html` | HTML5 UP component reference (not linked in nav) |
-| `generic.html` | `/generic.html` | HTML5 UP generic page template (not linked in nav) |
+| `src/index.njk` | `/index.html` | Landing page with hero image, promo video and upcoming shows |
+| `src/band.njk` | `/band.html` | Band introduction and member profiles |
+| `src/media.njk` | `/media.html` | Embedded video |
+| `src/live.njk` | `/live.html` | Upcoming and past shows, booking contact |
+| `elements.html` | `/elements.html` | HTML5 UP component reference, copied as-is (not linked in nav) |
+| `generic.html` | `/generic.html` | HTML5 UP generic page template, copied as-is (not linked in nav) |
 
 ## Architecture
 
-The site is a fully static multi-page HTML site — no build step, no framework, no JavaScript bundler.
+The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [Nunjucks](https://mozilla.github.io/nunjucks/) templates that share one layout, and repeating content (gigs, band members, links) lives in data files. Eleventy renders everything to plain static HTML in `_site/`. There is no client-side framework or bundler.
 
 ```
 .
-├── index.html              # Home
-├── band.html               # Band
-├── media.html              # Media
-├── live.html               # Live
-├── CNAME                   # GitHub Pages custom domain
-├── assets/
+├── eleventy.config.js      # Eleventy config: input/output folders, files copied as-is
+├── package.json            # Eleventy dependency and npm scripts
+├── .github/workflows/
+│   └── deploy.yml          # Builds the site and deploys it to GitHub Pages
+├── src/
+│   ├── _includes/
+│   │   ├── base.njk        # Shared layout: <head>, header, nav, footer, scripts
+│   │   └── macros.njk      # Reusable pieces: gigs table, booking button
+│   ├── _data/
+│   │   ├── site.json       # Band name, email, social links, nav, promo video URL
+│   │   ├── gigs.json       # Upcoming and past shows
+│   │   ├── members.json    # Band members: name, role, photo, social links
+│   │   └── year.js         # Current year for the copyright line
+│   ├── index.njk           # Home
+│   ├── band.njk            # Band
+│   ├── media.njk           # Media
+│   └── live.njk            # Live
+├── CNAME                   # GitHub Pages custom domain (copied into the build)
+├── assets/                 # Copied into the build as-is
 │   ├── css/
 │   │   ├── main.css        # HTML5 UP Massively base styles (compiled from sass/)
 │   │   ├── terrizzi.css    # Custom overrides and brand styles
 │   │   ├── noscript.css    # Fallback styles when JS is disabled
 │   │   └── fontawesome-all.min.css
-│   ├── sass/               # SCSS source for main.css (not compiled at deploy time)
+│   ├── sass/               # SCSS source for main.css (not compiled during the build)
 │   ├── js/                 # jQuery + HTML5 UP interaction scripts
 │   ├── img/
 │   │   ├── logo/           # Brand logos and icons (PNG, white/black, transparent variants)
 │   │   ├── band/           # Band photos (black and white rehearsal/location shots, colour stage shots)
 │   │   └── [member dirs]/  # Per-member portraits (daniel, maarten, joris, stefan)
 │   └── webfonts/           # Font Awesome webfonts
-└── images/                 # HTML5 UP template images (bg.jpg, overlay.png, pic0x.jpg)
+├── images/                 # HTML5 UP template images (bg.jpg, overlay.png, pic0x.jpg)
+└── _site/                  # Build output (not committed)
 ```
+
+### Templates
+
+Each page in `src/` extends `_includes/base.njk` and fills in its own blocks (`main`, plus `head` and `intro` on the home page). Front matter at the top of each page sets the `<title>`, the `<body>` class and which nav item is active. To change something that appears on every page (nav, footer, scripts), edit `base.njk` once.
 
 ### CSS layers
 
 1. **`assets/sass/`** — HTML5 UP Massively SCSS source. The compiled output is `assets/css/main.css`. The SCSS is kept for reference; it is not recompiled during deploy.
 2. **`assets/css/terrizzi.css`** — All band-specific customisations, loaded after `main.css`:
    - **Header / logo:** the header shows `Terrizzi_White.png` and is `position: sticky`, so the logo stays pinned at the top while scrolling. A dark bar fades in behind it once pinned. Sizes are driven by CSS variables on `#header` (`--pt`, `--pb`, `--logo-h`, `--gap`); the overlap with the home-page intro is calculated from the same variables, so change them there rather than in several places.
-   - **Photo backgrounds:** `live.html`, `band.html` and `media.html` set a `page-live` / `page-band` / `page-media` class on `<body>`. Each class gives that page a fixed, darkened full-viewport photo background. To change a photo, edit the matching rule at the end of `terrizzi.css`.
-   - **Home hero:** inline styles in `index.html` switch between a 9:16 (mobile) and 16:9 (desktop) hero image.
+   - **Photo backgrounds:** The live, band and media pages set a `page-live` / `page-band` / `page-media` class on `<body>` (via `bodyClass` in their front matter). Each class gives that page a fixed, darkened full-viewport photo background. To change a photo, edit the matching rule at the end of `terrizzi.css`.
+   - **Home hero:** inline styles in `src/index.njk` switch between a 9:16 (mobile) and 16:9 (desktop) hero image.
    - Member cards, tables (left-aligned), video embeds and social icon styling.
 
 ### JavaScript
@@ -67,43 +85,50 @@ The scripts in `assets/js/` are the HTML5 UP Massively bundle: jQuery, ScrollEx,
 
 ### Content
 
-- **Shows:** add a `<tr>` to the table in `live.html` (and the shorter table in `index.html`). Past shows go in the second table on `live.html`.
-- **Booking:** all "Stuur een boekingsaanvraag" buttons link to `mailto:info@terrizzi.nl` with a prefilled subject.
-- **Video:** the YouTube embeds in `index.html` and `media.html` currently use a placeholder video ID. Replace the ID in both places with the real video.
+Most content updates are edits to a data file in `src/_data/`. No HTML needed.
+
+- **Shows:** add an entry to `upcoming` in `gigs.json`. It appears on both the Live page and the home page. Add a `tickets` URL to show a Tickets button on the Live page. Move a show to `past` once it has happened.
+
+  ```json
+  { "date": "17 januari 2027", "venue": "Popcentrale", "city": "Dordrecht", "tickets": "" }
+  ```
+
+- **Band members:** edit `members.json` (name, role, photo path, social links).
+- **Social links, email, nav:** edit `site.json`. The footer, nav icons, copyright line and booking buttons all read from it.
+- **Booking:** all "Stuur een boekingsaanvraag" buttons link to the email in `site.json` with a prefilled subject (`bookingSubject`).
+- **Video:** `promoVideo` in `site.json` is used by both the home and media pages. It is currently a placeholder video; replace it with the real embed URL.
 
 ## Deploy — GitHub Pages
 
-The repository deploys automatically to GitHub Pages on every push to `master`. No CI workflow file is required; GitHub Pages is configured to serve directly from the root of the `master` branch.
+Every push to `master` runs the workflow in `.github/workflows/deploy.yml`. It installs dependencies, runs `npm run build`, and publishes `_site/` to GitHub Pages. You can also start it by hand from the repository's **Actions** tab (**Run workflow**).
 
-The `CNAME` file contains `preview.terrizzi.nl`, which tells GitHub Pages to respond on that custom domain. DNS must have a `CNAME` record pointing `preview.terrizzi.nl` → `dvterrizzi.github.io`.
+**One-time setting:** in the repository's **Settings → Pages**, **Source** must be set to **GitHub Actions** (not "Deploy from a branch").
+
+The `CNAME` file contains `preview.terrizzi.nl` and is copied into the build, which tells GitHub Pages to respond on that custom domain. DNS must have a `CNAME` record pointing `preview.terrizzi.nl` → `dvterrizzi.github.io`.
 
 **Deploy flow:**
 
 ```
 git push origin master
        │
-       └─▶ GitHub Pages picks up the push
-               └─▶ serves the repo root as static files
+       └─▶ GitHub Actions: npm ci → npm run build
+               └─▶ uploads _site/ and deploys it to GitHub Pages
                        └─▶ https://preview.terrizzi.nl
 ```
 
-Because the site is purely static, there is no build phase. Any file pushed to `master` is immediately live (propagation typically takes under a minute).
+A deploy usually takes one to two minutes. Progress and errors are visible in the **Actions** tab.
 
 ## Local development
 
-Serve the folder over HTTP to avoid problems with relative paths.
-
-Preferably, use VS Code with the Live Server extension. Or otherwise:
+Requires [Node.js](https://nodejs.org/) (on macOS: `brew install node`).
 
 ```bash
-# Python 3
-python3 -m http.server 8080
-
-# Ruby (preinstalled on macOS)
-ruby -run -e httpd . -p 8080
+npm install       # once, installs Eleventy
+npm start         # dev server with live reload at http://localhost:8080
+npm run build     # one-off build into _site/
 ```
 
-Then open `http://localhost:8080`.
+Edit files in `src/` or `assets/`; the dev server rebuilds and reloads the browser automatically.
 
 ## Attribution
 
