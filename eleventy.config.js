@@ -4,10 +4,6 @@ export default function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy({ "images": "images" });
 	eleventyConfig.addPassthroughCopy({ "CNAME": "CNAME" });
 
-	// HTML5 UP reference pages, kept as-is (not linked in the nav).
-	eleventyConfig.addPassthroughCopy({ "elements.html": "elements.html" });
-	eleventyConfig.addPassthroughCopy({ "generic.html": "generic.html" });
-
 	return {
 		dir: {
 			input: "src",

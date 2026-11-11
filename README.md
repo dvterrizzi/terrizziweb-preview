@@ -10,8 +10,6 @@ Website for **Terrizzi**, a four-piece Dutch rock band. Live at [preview.terrizz
 | `src/band.njk` | `/band.html` | Band introduction and member profiles |
 | `src/media.njk` | `/media.html` | Embedded video |
 | `src/live.njk` | `/live.html` | Upcoming and past shows, booking contact |
-| `elements.html` | `/elements.html` | HTML5 UP component reference, copied as-is (not linked in nav) |
-| `generic.html` | `/generic.html` | HTML5 UP generic page template, copied as-is (not linked in nav) |
 
 ## Architecture
 
@@ -50,7 +48,7 @@ The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [
 │   │   ├── band/           # Band photos (black and white rehearsal/location shots, colour stage shots)
 │   │   └── [member dirs]/  # Per-member portraits (daniel, maarten, joris, stefan)
 │   └── webfonts/           # Font Awesome webfonts
-├── images/                 # HTML5 UP template images (bg.jpg, overlay.png, pic0x.jpg)
+├── images/                 # HTML5 UP template images used by main.css (bg.jpg, overlay.png)
 └── _site/                  # Build output (not committed)
 ```
 
