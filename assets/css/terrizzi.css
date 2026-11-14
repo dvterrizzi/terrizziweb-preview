@@ -327,3 +327,57 @@ table th,
 table td {
 	text-align: left;
 }
+
+/* Vertical (9:16) video, e.g. a YouTube Short ----------------- */
+.video-responsive.video-vertical {
+	width: min(100%, 360px);
+	height: auto;
+	padding-bottom: 0;
+	aspect-ratio: 9 / 16;
+	margin: 0 auto;
+	border-radius: 8px;
+}
+
+/* Home: band bio next to the promo video ---------------------- */
+.promo-split {
+	display: flex;
+	align-items: center;
+	gap: 3rem;
+}
+
+.promo-split .promo-bio {
+	flex: 1;
+	text-align: left;
+}
+
+.promo-split .promo-bio p {
+	margin: 0;
+}
+
+.promo-split .video-responsive {
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+/* Landscape video needs room to grow, so it takes the wider column */
+.promo-split .video-responsive:not(.video-vertical) {
+	flex: 1.4;
+	padding-bottom: 0;
+	height: auto;
+	aspect-ratio: 16 / 9;
+}
+
+@media screen and (max-width: 980px) {
+	.promo-split {
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.promo-split .video-responsive {
+		margin: 0 auto;
+	}
+
+	.promo-split .video-responsive:not(.video-vertical) {
+		width: 100%;
+	}
+}

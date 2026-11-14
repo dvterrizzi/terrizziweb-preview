@@ -35,3 +35,13 @@
 	</table>
 </div>
 {%- endmacro %}
+
+{# Promo video embed. Uses a 9:16 frame when site.promoVideoVertical is true (e.g. a YouTube Short). #}
+{% macro promoVideo(site, title="Terrizzi - Promo Video") -%}
+<div class="video-responsive{% if site.promoVideoVertical %} video-vertical{% endif %}">
+	<iframe loading="lazy" src="{{ site.promoVideo }}"
+		title="{{ title }}"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+		allowfullscreen></iframe>
+</div>
+{%- endmacro %}

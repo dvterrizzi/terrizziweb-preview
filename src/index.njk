@@ -5,7 +5,7 @@ navKey: home
 permalink: index.html
 ---
 {% extends "base.njk" %}
-{% from "macros.njk" import upcomingTable %}
+{% from "macros.njk" import upcomingTable, promoVideo %}
 
 {% block head %}
 	<style>
@@ -36,16 +36,14 @@ permalink: index.html
 {% endblock %}
 
 {% block main %}
-			<!-- Watch Now (full width) -->
+			<!-- Bio + promo video -->
 			<article class="post featured">
-				<iframe width="100%" height="480" loading="lazy"
-					src="{{ site.promoVideo }}"
-					title="Terrizzi - Promo Video"
-					frameborder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-					allowfullscreen
-					class="video-embed">
-				</iframe>
+				<div class="promo-split">
+					<div class="promo-bio">
+						<p>{{ site.bio }}</p>
+					</div>
+					{{ promoVideo(site) }}
+				</div>
 			</article>
 
 			<!-- Upcoming Shows (full width) -->

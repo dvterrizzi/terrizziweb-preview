@@ -12,5 +12,7 @@
 		{ "title": "Media", "url": "media.html", "key": "media" },
 		{ "title": "Live", "url": "live.html", "key": "live" }
 	],
-	"promoVideo": "https://www.youtube.com/embed/jNQXAC9IVRw"
+	"promoVideo": "https://www.youtube.com/embed/pSfdH63I18k",
+	"promoVideoVertical": true,
+	"bio": "Gedreven door een gedeelde passie voor rockmuziek en een onoverwinnelijke do-it-yourself mentaliteit timmert Terrizzi hard aan de weg van professionele bands. Een moderne mix waarbij verschillende stijlen samenkomen verraden de invloeden van rocklegendes als Hendrix, Stone Temple Pilots, Soundgarden en The Who. Met jarenlange podiumervaring in verschillende stijlen weet Terrizzi een ouderwetse rockshow van topkwaliteit neer te zetten."
 }

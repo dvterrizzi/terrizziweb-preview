@@ -5,6 +5,7 @@ navKey: media
 permalink: media.html
 ---
 {% extends "base.njk" %}
+{% from "macros.njk" import promoVideo %}
 
 {% block main %}
 			<section class="post">
@@ -13,10 +14,6 @@ permalink: media.html
 				</header>
 
 				<!-- Videos -->
-				<div class="video-responsive">
-					<iframe loading="lazy" src="{{ site.promoVideo }}"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowfullscreen></iframe>
-				</div>
+				{{ promoVideo(site) }}
 			</section>
 {% endblock %}
