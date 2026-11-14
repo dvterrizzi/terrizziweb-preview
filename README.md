@@ -9,6 +9,7 @@ Website for **Terrizzi**, a four-piece Dutch rock band. Live at [preview.terrizz
 | `src/index.njk` | `/index.html` | Landing page with hero image, promo video and upcoming shows |
 | `src/band.njk` | `/band.html` | Band introduction and member profiles |
 | `src/media.njk` | `/media.html` | Embedded video |
+| `src/404.njk` | `/404.html` | "Pagina niet gevonden", shown by GitHub Pages for any missing URL |
 | `src/live.njk` | `/live.html` | Upcoming and past shows, booking contact |
 
 ## Architecture
@@ -29,11 +30,13 @@ The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [
 │   │   ├── site.json       # Band name, email, social links, nav, promo video URL
 │   │   ├── gigs.json       # Upcoming and past shows
 │   │   ├── members.json    # Band members: name, role, photo, social links
+│   │   ├── env.js          # Preview vs production build (site URL, noindex)
 │   │   └── year.js         # Current year for the copyright line
 │   ├── index.njk           # Home
 │   ├── band.njk            # Band
 │   ├── media.njk           # Media
-│   └── live.njk            # Live
+│   ├── live.njk            # Live
+│   └── 404.njk             # Page not found
 ├── CNAME                   # GitHub Pages custom domain (copied into the build)
 ├── assets/                 # Copied into the build as-is
 │   ├── css/
@@ -55,6 +58,16 @@ The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [
 ### Templates
 
 Each page in `src/` extends `_includes/base.njk` and fills in its own blocks (`main`, plus `head` and `intro` on the home page). Front matter at the top of each page sets the `<title>`, the `<body>` class and which nav item is active. To change something that appears on every page (nav, footer, scripts), edit `base.njk` once.
+
+### Search engines and link previews
+
+- **Preview vs production:** builds are *preview* by default. Only a build run with `SITE_ENV=production` counts as production (see `src/_data/env.js`).
+  - **Preview** (local and `preview.terrizzi.nl`): every page gets `<meta name="robots" content="noindex, nofollow">`, so search engines skip it, and links use `https://preview.terrizzi.nl`.
+  - **Production:** pages can be indexed, and links use `https://www.terrizzi.nl`. Any future production deploy workflow **must** build with `SITE_ENV=production`.
+- **Meta tags:** every page has `lang="nl"`, a meta description, a canonical URL and Open Graph / Twitter tags. These make WhatsApp, Instagram, Facebook etc. show a title, description and image when someone shares a link.
+  - The default description and the share image (`assets/img/social/terrizzi-share.jpg`, 1200×630) are set in `site.json`.
+  - A page can set its own `description` in its front matter.
+- **404 page:** `src/404.njk` is never indexed. It sets `baseHref: /`, so its links and images also work on nested missing URLs like `/foo/bar`.
 
 ### CSS layers
 
@@ -79,7 +92,7 @@ The scripts in `assets/js/` are the HTML5 UP Massively bundle: jQuery, ScrollEx,
   ```
 
 - Images below the fold use `loading="lazy"`.
-- Give photos descriptive `alt` text.
+- Give photos descriptive `alt` text in Dutch (who or what is in the photo). Member photos get theirs automatically from `members.json` ("Daniël, basgitaar bij Terrizzi"). Purely decorative images such as the logo stamps use `alt=""`.
 
 ### Content
 

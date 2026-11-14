@@ -1,7 +1,6 @@
 [
 	{
 		"name": "Daniël",
-		"alt": "Daniel",
 		"role": "Basgitaar",
 		"photo": "assets/img/daniel/IMG_2089_9x16_BW_web.jpg",
 		"social": [
@@ -11,21 +10,18 @@
 	},
 	{
 		"name": "Maarten",
-		"alt": "Maarten",
 		"role": "Gitaar",
 		"photo": "assets/img/maarten/IMG_2113_9x16_BW_web.jpg",
 		"social": []
 	},
 	{
 		"name": "Joris",
-		"alt": "Joris",
 		"role": "Zang",
 		"photo": "assets/img/joris/IMG_2147_9x16_BW_web.jpg",
 		"social": []
 	},
 	{
 		"name": "Stefan",
-		"alt": "Stefan",
 		"role": "Drums",
 		"photo": "assets/img/stefan/IMG_2210_9x16_BW_web.jpg",
 		"social": [

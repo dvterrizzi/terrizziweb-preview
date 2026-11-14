@@ -1,6 +1,13 @@
 {
 	"name": "Terrizzi",
 	"email": "info@terrizzi.nl",
+	"description": "Terrizzi is een vierkoppige rockband met een moderne mix van stijlen en invloeden van Hendrix, Stone Temple Pilots, Soundgarden en The Who. Bekijk optredens en video’s, of boek de band.",
+	"shareImage": {
+		"src": "assets/img/social/terrizzi-share.jpg",
+		"width": 1200,
+		"height": 630,
+		"alt": "De vier bandleden van Terrizzi in zwart-wit in een steeg"
+	},
 	"bookingSubject": "Boekingsaanvraag Terrizzi",
 	"social": [
 		{ "name": "Instagram", "icon": "fa-instagram", "url": "https://www.instagram.com/terrizzi_official" },

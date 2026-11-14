@@ -1,0 +1,27 @@
+---
+title: Terrizzi - Pagina niet gevonden
+description: "Deze pagina bestaat niet (meer)."
+bodyClass: is-preload page-inner
+navKey: none
+permalink: 404.html
+noindex: true
+# GitHub Pages serves this file for any missing URL, including nested paths
+# like /a/b/c, so relative links must resolve from the site root.
+baseHref: /
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block main %}
+			<section class="post">
+				<header class="major">
+					<h1>Pagina niet gevonden</h1>
+					<p>Deze pagina bestaat niet (meer). Misschien is hij verplaatst, of zat er een typfout in de link.</p>
+				</header>
+
+				<ul class="actions special">
+					<li><a href="index.html" class="button primary">Naar de homepage</a></li>
+					<li><a href="live.html" class="button">Bekijk optredens</a></li>
+				</ul>
+			</section>
+{% endblock %}
