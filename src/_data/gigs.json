@@ -1,8 +1,7 @@
 {
 	"upcoming": [
 		{ "date": "zondag 17 januari 2027", "venue": "Popcentrale", "city": "Dordrecht", "tickets": "" },
-		{ "date": "zondag 9 mei 2027", "venue": "Parkpaviljoen", "city": "Waalwijk", "tickets": "" },
-		{ "date": "donderdag 4 november 2027", "venue": "Phoenix", "city": "Breda", "tickets": "" }
+		{ "date": "zondag 9 mei 2027", "venue": "Parkpaviljoen", "city": "Waalwijk", "tickets": "" }
 	],
 	"past": []
 }
