@@ -2,7 +2,6 @@ export default function (eleventyConfig) {
 	// Static files are copied to the output as-is.
 	eleventyConfig.addPassthroughCopy({ "assets": "assets" });
 	eleventyConfig.addPassthroughCopy({ "images": "images" });
-	eleventyConfig.addPassthroughCopy({ "CNAME": "CNAME" });
 
 	return {
 		dir: {

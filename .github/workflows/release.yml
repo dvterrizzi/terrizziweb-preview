@@ -1,0 +1,78 @@
+name: Deploy production (www.terrizzi.nl)
+
+# Publishing a GitHub release builds that release's tag as a production build
+# and pushes the result to the gh-pages branch of dvterrizzi/terrizziweb-production,
+# which GitHub Pages serves on www.terrizzi.nl.
+#
+# Requires the PRODUCTION_DEPLOY_KEY secret: the private half of an SSH deploy key
+# that has write access to the production repo.
+#
+# "Run workflow" in the Actions tab redeploys a chosen branch or tag by hand.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+env:
+  PRODUCTION_REPO: dvterrizzi/terrizziweb-production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.terrizzi.nl
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: Build production site
+        run: npm run build
+        env:
+          SITE_ENV: production
+
+      - name: Check build
+        run: |
+          test "$(cat _site/CNAME)" = "www.terrizzi.nl"
+          if grep -l 'name="robots"' _site/*.html | grep -v '_site/404.html'; then
+            echo "::error::Production pages must not contain a robots noindex tag"
+            exit 1
+          fi
+          # Serve the files as-is; don't let GitHub Pages run Jekyll on them.
+          touch _site/.nojekyll
+
+      - name: Push to production repo
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
+        run: |
+          if [ -z "$DEPLOY_KEY" ]; then
+            echo "::error::The PRODUCTION_DEPLOY_KEY secret is not set in this repository"
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+
+          cd _site
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Deploy ${GITHUB_REF_NAME} (${GITHUB_SHA::7})"
+
+          # The production repo only holds the latest build; history lives in this repo.
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            git push --force "git@github.com:${PRODUCTION_REPO}.git" gh-pages

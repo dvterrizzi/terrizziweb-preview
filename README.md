@@ -21,7 +21,8 @@ The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [
 ├── eleventy.config.js      # Eleventy config: input/output folders, files copied as-is
 ├── package.json            # Eleventy dependency and npm scripts
 ├── .github/workflows/
-│   └── deploy.yml          # Builds the site and deploys it to GitHub Pages
+│   ├── deploy.yml          # Preview: every push to master → preview.terrizzi.nl
+│   └── release.yml         # Production: every published release → www.terrizzi.nl
 ├── src/
 │   ├── _includes/
 │   │   ├── base.njk        # Shared layout: <head>, header, nav, footer, scripts
@@ -30,14 +31,14 @@ The site is built with [Eleventy](https://www.11ty.dev/) (11ty). The pages are [
 │   │   ├── site.json       # Band name, email, social links, nav, promo video URL
 │   │   ├── gigs.json       # Upcoming and past shows
 │   │   ├── members.json    # Band members: name, role, photo, social links
-│   │   ├── env.js          # Preview vs production build (site URL, noindex)
+│   │   ├── env.js          # Preview vs production build (domain, URL, noindex)
 │   │   └── year.js         # Current year for the copyright line
 │   ├── index.njk           # Home
 │   ├── band.njk            # Band
 │   ├── media.njk           # Media
 │   ├── live.njk            # Live
-│   └── 404.njk             # Page not found
-├── CNAME                   # GitHub Pages custom domain (copied into the build)
+│   ├── 404.njk             # Page not found
+│   └── CNAME.njk           # Generates the CNAME file (custom domain) for each build
 ├── assets/                 # Copied into the build as-is
 │   ├── css/
 │   │   ├── main.css        # HTML5 UP Massively base styles (compiled from sass/)
@@ -111,13 +112,23 @@ Most content updates are edits to a data file in `src/_data/`. No HTML needed.
 
 ## Deploy — GitHub Pages
 
-Every push to `master` runs the workflow in `.github/workflows/deploy.yml`. It installs dependencies, runs `npm run build`, and publishes `_site/` to GitHub Pages. You can also start it by hand from the repository's **Actions** tab (**Run workflow**).
+The site has two environments, built from the same source in this repository:
 
-**One-time setting:** in the repository's **Settings → Pages**, **Source** must be set to **GitHub Actions** (not "Deploy from a branch").
+| | Preview | Production |
+|---|---|---|
+| URL | https://preview.terrizzi.nl | https://www.terrizzi.nl |
+| Deploys when | every push to `master` | a GitHub release is published |
+| Workflow | `.github/workflows/deploy.yml` | `.github/workflows/release.yml` |
+| Hosted by | this repo's GitHub Pages | GitHub Pages of [`dvterrizzi/terrizziweb-production`](https://github.com/dvterrizzi/terrizziweb-production) (`gh-pages` branch) |
+| Search engines | `noindex` on every page | indexable |
 
-The `CNAME` file contains `preview.terrizzi.nl` and is copied into the build, which tells GitHub Pages to respond on that custom domain. DNS must have a `CNAME` record pointing `preview.terrizzi.nl` → `dvterrizzi.github.io`.
+The `CNAME` file (the custom domain) is generated per build by `src/CNAME.njk` from `src/_data/env.js`, so preview and production each get their own domain.
 
-**Deploy flow:**
+### Preview
+
+Every push to `master` builds the site and publishes `_site/` to this repo's GitHub Pages. You can also start it by hand from the **Actions** tab (**Run workflow**).
+
+**One-time setting:** in this repository's **Settings → Pages**, **Source** must be set to **GitHub Actions**. DNS needs a `CNAME` record pointing `preview.terrizzi.nl` → `dvterrizzi.github.io`.
 
 ```
 git push origin master
@@ -127,7 +138,27 @@ git push origin master
                        └─▶ https://preview.terrizzi.nl
 ```
 
-A deploy usually takes one to two minutes. Progress and errors are visible in the **Actions** tab.
+### Production
+
+When the preview looks right, publish a release: on GitHub go to **Releases → Draft a new release**, create a new tag such as `v1.1.0`, and click **Publish release**. Or from the terminal:
+
+```bash
+gh release create v1.1.0 --title "v1.1.0" --notes "What changed"
+```
+
+The release workflow then:
+1. builds that tag with `SITE_ENV=production`;
+2. checks that the build has `CNAME` `www.terrizzi.nl` and no `noindex` tags (except the 404 page);
+3. force-pushes the result to the `gh-pages` branch of `terrizziweb-production`, which GitHub Pages serves on `www.terrizzi.nl`.
+
+The production repo only ever holds the latest build. Never edit it by hand; the next release overwrites it. To redeploy without a new release, use **Actions → Deploy production → Run workflow** and pick a tag.
+
+**One-time setup:**
+- The `PRODUCTION_DEPLOY_KEY` secret in this repo holds the private half of an SSH deploy key. The production repo has the public half, with write access.
+- In the production repo, **Settings → Pages** is set to **Deploy from a branch → `gh-pages` / (root)**, with custom domain `www.terrizzi.nl` and **Enforce HTTPS** on.
+- DNS: `www` is a `CNAME` to `dvterrizzi.github.io`, and `terrizzi.nl` has GitHub's A/AAAA records, so GitHub redirects it to `www`.
+
+Deploys usually take one to two minutes. Progress and errors are visible in the **Actions** tab.
 
 ## Local development
 
